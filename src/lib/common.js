@@ -3,7 +3,15 @@ import queryString from 'query-string';
 const Common = {
   async loadFolder(baseApiUrl, folder){
     return new Promise(async(resolve, reject) => {
-      const apiUrl = `${baseApiUrl}/${folder}`;
+      const query = queryString.stringify({
+        'target': folder,
+      });
+      let apiUrl = `${baseApiUrl}/folder?${query}`;
+
+      //If target is root folder, use root api
+      if(folder === 'root'){
+        apiUrl = `${baseApiUrl}/root`;
+      }
       const fetchResult = await fetch(apiUrl);
       const status = await fetchResult.status;
 

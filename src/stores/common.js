@@ -6,11 +6,15 @@ export const useCommonStore = defineStore({
   state: () => ({
     apiUrl: import.meta.env.VITE_API_URL,
     fileUrl: import.meta.env.VITE_API_FILE_URL,
-    currentPath: '/',
+    currentPath: '/',  //This path is show for user.
+    currentFolder: '', //This path is for system to read.
   }),
   actions: {
     setCurrentPath(newPath) {
       this.currentPath = newPath;
+    },
+    setCurrentFolder(newFolder){
+      this.currentFolder = newFolder;
     },
   },
 })

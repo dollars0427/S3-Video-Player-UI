@@ -47,6 +47,7 @@ export default {
     switchFolder(fileKey, fileName){
       const store = useCommonStore();
       store.setCurrentPath(`/${fileKey}`);
+      store.setCurrentFolder(`${fileKey}`);
       this.$router.push(`/folder/${fileName}`);
     },
     async loadRootContent(){

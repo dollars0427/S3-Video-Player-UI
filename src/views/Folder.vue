@@ -7,9 +7,15 @@
       <ToolArea />
       <div class="page-content">
         <div class="file-list">
-          <div class="file" v-for="folder in folders" @click="switchFolder(folder.fileKey, folder.filename)">
-            <img src="@/assets/folder-80.png"/>
-            <div class="file-name">{{ folder.filename }}</div>
+          <div class="file" v-for="file in files">
+            <div class="file-inner" v-if="file.type === 'folder'" @click="switchFolder(file.fileKey, file.filename)">
+              <img src="@/assets/folder-80.png"/>
+              <div class="file-name">{{ file.filename }}</div>
+            </div>
+            <div class="file-inner" v-else @click="playVideo(file.fileKey)">
+              <img :src="`${fileUrl}/${file.thumbnail}`" class="thumbnail" />
+              <div class="file-name">{{ file.filename }}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -24,42 +30,50 @@ import ToolArea from '@/components/ToolArea.vue';
 import Common from '../lib/common';
 
 export default {
-  name: 'Home',
+  name: 'Folder',
   mounted(){
-    this.loadRootContent();
+    this.loadFolderContent();
   },
   components: {
     ToolArea,
   },
   data(){
     return {
-      folders: [],
+      files: [],
     }
   },
   methods:{
-    async loadRootContent(){
+    async loadFolderContent(){
       const baseApiUrl = this.apiUrl;
-      const folders = await Common.loadFolder(baseApiUrl, 'root');
-      this.folders = folders;
+      const folder = this.currentFolder;
+      const files = await Common.loadFolder(baseApiUrl, folder);
+      this.files = files;
     },
   },
   computed: {
-    ...mapState(useCommonStore, ['apiUrl', 'currentPath'])
+    ...mapState(useCommonStore, ['apiUrl', 'currentPath', 'currentFolder'])
   },
  }
 </script>
 
 <style lang="scss">
-.folder-list{
+.file-list{
   display: flex;
-  .folder{
+  .file{
     margin-right: 50px;
     &:hover{
       cursor: pointer;
     }
   }
 }
-.folder-name{
+.file-inner{
   text-align: center;
+}
+.file-name{
+  text-align: center;
+}
+.thumbnail{
+  width: 150px;
+  height: 100px;
 }
 </style>
